@@ -8,7 +8,7 @@ namespace Spectaris.Core
         TimeSpan GetTimeSinceTick(TimeSpan tick);
     }
 
-    public class Timeline
+    public class Timeline : ITimeline
     {
         private readonly ITimepiece _timepiece;
 
