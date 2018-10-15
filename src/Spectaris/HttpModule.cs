@@ -12,8 +12,7 @@ namespace Spectaris
         {
             var requestHandlerFactory = new RequestHandlerFactory();
 
-            var workerContext = new WorkerContext(context);
-            _worker = new Worker(workerContext, requestHandlerFactory);
+            _worker = new Worker(requestHandlerFactory, () => new WorkerContext(context));
 
             context.BeginRequest += (sender, args) => _worker.BeginRequest();
             context.EndRequest += (sender, args) => _worker.EndRequest();
