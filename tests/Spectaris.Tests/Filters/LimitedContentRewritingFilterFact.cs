@@ -37,6 +37,32 @@ namespace Spectaris.Tests.Filters
         }
 
         [Fact]
+        public void When_content_is_rewritten_use_modified_stream()
+        {
+            var contentFake = Autofixture.Create<string>();
+            var modifiedFake = Autofixture.CreateMany<byte>().ToArray();
+
+            void RewriteAction(MemoryStream stream)
+            {
+                stream.SetLength(0);
+                stream.Write(modifiedFake, 0, modifiedFake.Length);
+            }
+
+            var memory = new MemoryStream();
+            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory);
+            limitedContentRewritingFilter.RewriteAction += RewriteAction;
+
+            // Act
+            using (var writer = new StreamWriter(limitedContentRewritingFilter))
+            {
+                writer.Write(contentFake);
+            }
+
+            // Assert
+            memory.ToArray().Should().BeEquivalentTo(modifiedFake);
+        }
+
+        [Fact]
         public void When_content_is_larger_then_max_then_do_not_rewrite()
         {
             var contentFake1 = Autofixture.CreateMany<byte>().ToArray();
