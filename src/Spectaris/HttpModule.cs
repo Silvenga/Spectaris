@@ -10,8 +10,10 @@ namespace Spectaris
 
         public void Init(HttpApplication context)
         {
+            var requestHandlerFactory = new RequestHandlerFactory();
+
             var workerContext = new WorkerContext(context);
-            _worker = new Worker(workerContext);
+            _worker = new Worker(workerContext, requestHandlerFactory);
 
             context.BeginRequest += (sender, args) => _worker.BeginRequest();
             context.EndRequest += (sender, args) => _worker.EndRequest();

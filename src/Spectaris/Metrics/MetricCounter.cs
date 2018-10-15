@@ -24,7 +24,7 @@ namespace Spectaris.Metrics
                 Count++;
                 Minimum = value < Minimum ? value : Minimum;
                 Maximum = value > Maximum ? value : Maximum;
-                Average = Total / (decimal)Count;
+                Average = Total / (decimal) Count;
             }
             finally
             {

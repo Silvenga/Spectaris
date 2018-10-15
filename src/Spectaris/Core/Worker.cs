@@ -7,18 +7,20 @@ namespace Spectaris.Core
         public Guid Id { get; } = Guid.NewGuid();
 
         private readonly IWorkerContext _context;
+        private readonly RequestHandlerFactory _handlerFactory;
 
         private RequestHandler _currentRequestHandler;
 
-        public Worker(IWorkerContext context)
+        public Worker(IWorkerContext context, RequestHandlerFactory handlerFactory)
         {
             _context = context;
+            _handlerFactory = handlerFactory;
         }
 
         public void BeginRequest()
         {
-            _currentRequestHandler = new RequestHandler(Id);
-            _currentRequestHandler.Start(_context);
+            _currentRequestHandler = _handlerFactory.Create();
+            _currentRequestHandler.Start(Id, _context);
         }
 
         public void EndRequest()
