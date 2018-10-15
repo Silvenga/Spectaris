@@ -22,7 +22,8 @@ namespace Spectaris.Tests.Filters
 
             MemoryStream rewriteStream = null;
             var memory = new MemoryStream();
-            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory, stream => { rewriteStream = new MemoryStream(stream.ToArray()); });
+            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory);
+            limitedContentRewritingFilter.RewriteAction += stream => { rewriteStream = new MemoryStream(stream.ToArray()); };
 
             // Act
             using (var writer = new StreamWriter(limitedContentRewritingFilter))
@@ -43,7 +44,8 @@ namespace Spectaris.Tests.Filters
             var rewriteCalled = false;
 
             var memory = new MemoryStream();
-            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory, stream => rewriteCalled = true, contentFake1.Length - 1);
+            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory, contentFake1.Length - 1);
+            limitedContentRewritingFilter.RewriteAction += stream => rewriteCalled = true;
 
             // Act
             limitedContentRewritingFilter.Write(contentFake1, 0, contentFake1.Length);
@@ -63,7 +65,8 @@ namespace Spectaris.Tests.Filters
             var rewriteCalled = false;
 
             var memory = new MemoryStream();
-            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory, stream => rewriteCalled = true, contentFake1.Length + contentFake2.Length);
+            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory, contentFake1.Length + contentFake2.Length);
+            limitedContentRewritingFilter.RewriteAction += stream => rewriteCalled = true;
 
             // Act
             limitedContentRewritingFilter.Write(contentFake1, 0, contentFake1.Length);

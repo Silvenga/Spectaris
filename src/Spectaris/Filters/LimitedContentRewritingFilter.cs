@@ -5,14 +5,14 @@ namespace Spectaris.Filters
 {
     public class LimitedContentRewritingFilter : PassThroughFilter
     {
-        private readonly Action<MemoryStream> _rewriteAction;
+        public event Action<MemoryStream> RewriteAction;
+
         private readonly int _maxObservedBytes;
         private readonly MemoryStream _memory = new MemoryStream();
         private long _observedBytes;
 
-        public LimitedContentRewritingFilter(Stream originalStream, Action<MemoryStream> rewriteAction, int maxObservedBytes = 1 * 1024) : base(originalStream)
+        public LimitedContentRewritingFilter(Stream originalStream, int maxObservedBytes = 1 * 1024) : base(originalStream)
         {
-            _rewriteAction = rewriteAction;
             _maxObservedBytes = maxObservedBytes;
         }
 
@@ -41,7 +41,7 @@ namespace Spectaris.Filters
         {
             if (_memory.Length > 0)
             {
-                _rewriteAction(_memory);
+                OnRewriteAction(_memory);
             }
         }
 
@@ -62,6 +62,11 @@ namespace Spectaris.Filters
         {
             _memory?.Close(); // Not strictly required on memory streams, /shrug.
             base.Close();
+        }
+
+        protected virtual void OnRewriteAction(MemoryStream memory)
+        {
+            RewriteAction?.Invoke(memory);
         }
     }
 }
