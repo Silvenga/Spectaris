@@ -1,4 +1,5 @@
 (ASP.NET Application Life Cycle Overview for IIS 7.0)[https://msdn.microsoft.com/en-us/library/bb470252.aspx]
+
 ```
 Validate the request, which examines the information sent by the browser and determines whether it contains potentially malicious markup. For more information, see ValidateRequest and Script Exploits Overview.
 Perform URL mapping, if any URLs have been configured in the UrlMappingsSection section of the Web.config file.
@@ -27,3 +28,5 @@ Raise the EndRequest event.
 Raise the PreSendRequestHeaders event.
 Raise the PreSendRequestContent event.
 ```
+
+> Don't use the last too - breaks IIS + async.
