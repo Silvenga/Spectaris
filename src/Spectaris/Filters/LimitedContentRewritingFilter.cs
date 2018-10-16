@@ -11,7 +11,7 @@ namespace Spectaris.Filters
         private readonly MemoryStream _memory = new MemoryStream();
         private long _observedBytes;
 
-        public LimitedContentRewritingFilter(Stream originalStream, int maxObservedBytes = 1 * 1024) : base(originalStream)
+        public LimitedContentRewritingFilter(Stream originalStream, int maxObservedBytes = 32 * 1024) : base(originalStream)
         {
             _maxObservedBytes = maxObservedBytes;
         }
@@ -47,7 +47,8 @@ namespace Spectaris.Filters
 
         private void FlushCache()
         {
-            base.Write(_memory.ToArray(), 0, (int)_memory.Length);
+            var buffer = _memory.ToArray();
+            base.Write(buffer, 0, buffer.Length);
             _memory.SetLength(0);
         }
 

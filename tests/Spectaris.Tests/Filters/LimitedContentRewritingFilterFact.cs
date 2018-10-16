@@ -37,6 +37,26 @@ namespace Spectaris.Tests.Filters
         }
 
         [Fact]
+        public void When_content_is_flushed_and_there_are_no_subscribers_flush_cached_content()
+        {
+            var contentFake = Autofixture.Create<string>();
+
+            var memory = new MemoryStream();
+            var limitedContentRewritingFilter = new LimitedContentRewritingFilter(memory);
+
+            // Act
+            using (var writer = new StreamWriter(limitedContentRewritingFilter))
+            {
+                writer.Write(contentFake);
+            }
+
+            // Assert
+            memory.Position = 0;
+            var result = new StreamReader(memory).ReadToEnd();
+            result.Should().Be(contentFake);
+        }
+
+        [Fact]
         public void When_content_is_rewritten_use_modified_stream()
         {
             var contentFake = Autofixture.Create<string>();
