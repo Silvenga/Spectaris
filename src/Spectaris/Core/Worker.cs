@@ -26,6 +26,11 @@ namespace Spectaris.Core
             _currentRequestHandler.Start(Id, _currentWorkerContext);
         }
 
+        public void BeginResponseSpooling()
+        {
+            _currentRequestHandler.Writing(_currentWorkerContext);
+        }
+
         public void EndRequest()
         {
             _currentRequestHandler.End(_currentWorkerContext);
