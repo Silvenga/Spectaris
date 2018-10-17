@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace Spectaris.Metrics
 {
@@ -33,6 +34,12 @@ namespace Spectaris.Metrics
                     _spinLock.Exit(false);
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            return
+                $"{nameof(Total)}: {Total}, {nameof(Count)}: {Count}, {nameof(Minimum)}: {Minimum}, {nameof(Maximum)}: {Maximum}, {nameof(Average)}: {Math.Round(Average, 2)}";
         }
     }
 }

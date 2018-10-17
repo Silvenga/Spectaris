@@ -25,5 +25,11 @@ namespace Spectaris.Metrics
             RequestTimeMilliseconds.AddMeasurement((long) requestTimeMs.TotalMilliseconds);
             RequestSizeBytes.AddMeasurement(requestSizeBytes);
         }
+
+        public override string ToString()
+        {
+            return
+                $"{nameof(StorageId)}: {StorageId}\r\n {nameof(TotalTimeMilliseconds)}: {TotalTimeMilliseconds}\r\n {nameof(RequestTimeMilliseconds)}: {RequestTimeMilliseconds}\r\n {nameof(RequestSizeBytes)}: {RequestSizeBytes}";
+        }
     }
 }
