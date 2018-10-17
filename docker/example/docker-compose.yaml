@@ -4,3 +4,5 @@ services:
     build: .
     ports:
       - 8080:80
+      - 4022:4022 # Remote Debugging
+      - 4023:4023 # Remote Debugging

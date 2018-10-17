@@ -4,6 +4,14 @@ FROM microsoft/dotnet-framework-samples:aspnetapp
 RUN & "$Env:WinDir\system32\inetsrv\appcmd.exe" set config 'Default Web Site' /section:"system.web/customErrors" /mode:"Off"; \
     & "$Env:WinDir\system32\inetsrv\appcmd.exe" set config 'Default Web Site' /section:"system.webServer/httpErrors" /errorMode:"Detailed"
 
+# Docker support is amazing!
+# https://www.richard-banks.org/2017/02/debug-net-in-windows-container.html
+EXPOSE 4020 4021
+RUN $downloadUrl = 'https://download.visualstudio.microsoft.com/download/pr/7dc739dc-7ac6-4d3e-9a1a-8545ec7b4b2b/5ad9ec4cc15ad30e7560dfb8620ad4bf/vs_remotetools.exe'; \
+    Invoke-WebRequest -OutFile c:\vs_remotetools.exe -Uri $downloadUrl; \
+    & 'c:\vs_remotetools.exe' /install /quiet \
+    rm c:\vs_remotetools.exe
+
 COPY rootfs/ /
 
 # More batch oddities, 
