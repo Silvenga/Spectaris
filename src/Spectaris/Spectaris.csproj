@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
     <Configurations>Debug;Release;Testing</Configurations>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' != 'Testing' ">
