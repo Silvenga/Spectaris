@@ -11,7 +11,7 @@ namespace Spectaris.Tests.Metrics
     public class MetricCounterFacts
     {
         private static readonly Fixture Autofixture = new Fixture();
-        private readonly MetricCounter _metricCounter = new MetricCounter();
+        private readonly IMetricCounter _metricCounter = new MetricCounter();
 
         [Fact]
         public void When_a_metric_is_added_then_count_should_increment()

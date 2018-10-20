@@ -3,7 +3,17 @@ using System.Threading;
 
 namespace Spectaris.Metrics
 {
-    public class MetricCounter
+    public interface IMetricCounter
+    {
+        long Total { get; }
+        long Count { get; }
+        long Minimum { get; }
+        long Maximum { get; }
+        decimal Average { get; }
+        void AddMeasurement(long value);
+    }
+
+    public class MetricCounter : IMetricCounter
     {
         // ReSharper disable once ArgumentsStyleLiteral
         private SpinLock _spinLock = new SpinLock(enableThreadOwnerTracking: true);
