@@ -2,7 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
-    <SignAssembly>true</SignAssembly>
+    <Configurations>Debug;Release;Testing</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' != 'Testing' ">
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>strong-name-key.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
