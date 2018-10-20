@@ -14,7 +14,7 @@ namespace Spectaris.Core
 
         public RequestHandler Create()
         {
-            return new RequestHandler(_timeline, SharedStorage);
+            return new RequestHandler(_timeline, SharedStorage, new MetricsDisplayHtmlRewriter(SharedStorage));
         }
     }
 }

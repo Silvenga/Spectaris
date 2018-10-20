@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Text.RegularExpressions;
 
 using Spectaris.Metrics;
 
@@ -8,19 +6,19 @@ namespace Spectaris.Core
 {
     public class RequestHandler
     {
-        private const string BodyTag = "<body>";
-        private static readonly Regex BodySearch = new Regex(BodyTag, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         private readonly ITimeline _timeline;
         private readonly IStorage _storage;
+        private readonly MetricsDisplayHtmlRewriter _htmlRewriter;
+
         private TimeSpan _requestStartTick;
         private TimeSpan _handlerStartTick;
         private TimeSpan _handlerTime;
 
-        public RequestHandler(ITimeline timeline, IStorage storage)
+        public RequestHandler(ITimeline timeline, IStorage storage, MetricsDisplayHtmlRewriter htmlRewriter)
         {
             _timeline = timeline;
             _storage = storage;
+            _htmlRewriter = htmlRewriter;
         }
 
         public void Start(Guid workerId, IRequestContext context)
@@ -45,24 +43,7 @@ namespace Spectaris.Core
         {
             if (context.ContentType.Contains("text/html"))
             {
-                context.AddRewrite(stream =>
-                {
-                    // Let the read start from the start of the memory stream.
-                    // This is also required if another subscriber got here first. 
-                    stream.Position = 0;
-                    TextReader reader = new StreamReader(stream);
-                    var content = reader.ReadToEnd();
-
-                    var output = $"<!--\r\nHistorical Metrics:\r\n{_storage}\r\n-->";
-                    content = BodySearch.Replace(content, BodyTag + output);
-
-                    // Zero the buffer so that the writer can start at the beginning.
-                    // Also prevents corrupting the output if < original stream.
-                    stream.SetLength(0);
-                    TextWriter writer = new StreamWriter(stream);
-                    writer.Write(content);
-                    writer.Flush();
-                });
+                context.AddRewrite(stream => _htmlRewriter.Rewrite(stream));
             }
         }
 

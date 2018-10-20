@@ -24,7 +24,7 @@ namespace Spectaris.Tests.Core
 
         public RequestHandlerFacts()
         {
-            _handler = new RequestHandler(_timelineMock, _storageMock);
+            _handler = new RequestHandler(_timelineMock, _storageMock, new MetricsDisplayHtmlRewriter(_storageMock));
 
             _storageMock.HandlerTimeMilliseconds.Returns(Substitute.For<IMetricCounter>());
             _storageMock.RequestSizeBytes.Returns(Substitute.For<IMetricCounter>());

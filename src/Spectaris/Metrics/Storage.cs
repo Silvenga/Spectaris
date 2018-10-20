@@ -9,6 +9,7 @@ namespace Spectaris.Metrics
         IMetricCounter HandlerTimeMilliseconds { get; }
         IMetricCounter RequestSizeBytes { get; }
         void AddRequest(TimeSpan totalTimeMs, TimeSpan handlerTimeMs, long requestSizeBytes);
+        string GetHumanReadable();
     }
 
     public class Storage : IStorage
@@ -31,6 +32,11 @@ namespace Spectaris.Metrics
             TotalTimeMilliseconds.AddMeasurement((long)totalTimeMs.TotalMilliseconds);
             HandlerTimeMilliseconds.AddMeasurement((long)handlerTimeMs.TotalMilliseconds);
             RequestSizeBytes.AddMeasurement(requestSizeBytes);
+        }
+
+        public string GetHumanReadable()
+        {
+            return "Historical Metrics:\r\n" + ToString();
         }
 
         public override string ToString()
