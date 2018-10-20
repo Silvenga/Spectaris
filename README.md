@@ -9,7 +9,7 @@ An experiment in IIS request instrumentation.
 
 Built releases can be downloaded from the releases [page](https://github.com/Silvenga/Spectaris/releases). 
 
-The easiest way to use the module is to install it into the GAC. The [`install-module.ps1`](./install-module.ps1) script can be used for this purpose. For example, in PowerShell:
+The easiest way to use the module is to install it into the GAC, from there we can register the module with IIS to be included across all sites running. The [`install-module.ps1`](./install-module.ps1) script can be used for this purpose. For example, in PowerShell:
 
 ```powershell
 # Download the installer:
@@ -21,3 +21,5 @@ Invoke-WebRequest https://github.com/Silvenga/Spectaris/releases/download/1.0.0/
 # Install the module to instrument managed requests (an absolute path is required):
 ./install-module.ps1 -Assembly (Resolve-Path .\Spectaris.dll).Path -ManagedOnly
 ```
+
+Note that all the IIS worker processes must be restarted for the module to be loaded.
