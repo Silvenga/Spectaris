@@ -4,7 +4,11 @@ namespace Spectaris.Core
 {
     public class RequestHandlerFactory
     {
-        private static readonly IStorage SharedStorage = new Storage(); // Being lazy here - by avoiding laziness...
+        private static readonly IStorage SharedStorage = new Storage(
+            new MetricCounter(),
+            new MetricCounter(),
+            new MetricCounter()
+        ); // Being lazy here...
 
         private readonly ITimeline _timeline = new Timeline(new Timepiece());
 

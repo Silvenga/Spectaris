@@ -15,9 +15,16 @@ namespace Spectaris.Metrics
     {
         public Guid StorageId { get; } = Guid.NewGuid();
 
-        public IMetricCounter TotalTimeMilliseconds { get; } = new MetricCounter();
-        public IMetricCounter HandlerTimeMilliseconds { get; } = new MetricCounter();
-        public IMetricCounter RequestSizeBytes { get; } = new MetricCounter();
+        public IMetricCounter TotalTimeMilliseconds { get; }
+        public IMetricCounter HandlerTimeMilliseconds { get; }
+        public IMetricCounter RequestSizeBytes { get; }
+
+        public Storage(IMetricCounter totalTimeMilliseconds, IMetricCounter handlerTimeMilliseconds, IMetricCounter requestSizeBytes)
+        {
+            TotalTimeMilliseconds = totalTimeMilliseconds;
+            HandlerTimeMilliseconds = handlerTimeMilliseconds;
+            RequestSizeBytes = requestSizeBytes;
+        }
 
         public void AddRequest(TimeSpan totalTimeMs, TimeSpan handlerTimeMs, long requestSizeBytes)
         {
