@@ -11,7 +11,7 @@ namespace Spectaris.Core
         void AddHeader(string name, string value);
     }
 
-    public interface IRequestContent : ICommonContent
+    public interface IRequestContext : ICommonContent
     {
         string RequestUrl { get; }
     }
@@ -24,7 +24,7 @@ namespace Spectaris.Core
         void AddRewrite(Action<MemoryStream> rewriteAction);
     }
 
-    public interface IWorkerContext : IRequestContent, IResponseContext
+    public interface IWorkerContext : IRequestContext, IResponseContext
     {
     }
 

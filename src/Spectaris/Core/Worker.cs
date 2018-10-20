@@ -26,7 +26,17 @@ namespace Spectaris.Core
             _currentRequestHandler.Start(Id, _currentWorkerContext);
         }
 
-        public void BeginResponseSpooling()
+        public void PreRequestHandlerExecute()
+        {
+            _currentRequestHandler.BeginHandler();
+        }
+
+        public void PostRequestHandlerExecute()
+        {
+            _currentRequestHandler.EndHandler();
+        }
+
+        public void PostReleaseRequestState()
         {
             _currentRequestHandler.Writing(_currentWorkerContext);
         }

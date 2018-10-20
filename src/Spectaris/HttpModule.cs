@@ -15,7 +15,9 @@ namespace Spectaris
             _worker = new Worker(requestHandlerFactory, () => new WorkerContext(context));
 
             context.BeginRequest += (sender, args) => _worker.BeginRequest();
-            context.PostReleaseRequestState += (sender, args) => _worker.BeginResponseSpooling();
+            context.PreRequestHandlerExecute += (sender, args) => _worker.PreRequestHandlerExecute();
+            context.PostRequestHandlerExecute += (sender, args) => _worker.PostRequestHandlerExecute();
+            context.PostReleaseRequestState += (sender, args) => _worker.PostReleaseRequestState();
             context.EndRequest += (sender, args) => _worker.EndRequest();
         }
 

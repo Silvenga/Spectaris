@@ -6,9 +6,9 @@ namespace Spectaris.Metrics
     {
         Guid StorageId { get; }
         MetricCounter TotalTimeMilliseconds { get; }
-        MetricCounter RequestTimeMilliseconds { get; }
+        MetricCounter HandlerTimeMilliseconds { get; }
         MetricCounter RequestSizeBytes { get; }
-        void AddRequest(TimeSpan totalTimeMs, TimeSpan requestTimeMs, long requestSizeBytes);
+        void AddRequest(TimeSpan totalTimeMs, TimeSpan handlerTimeMs, long requestSizeBytes);
     }
 
     public class Storage : IStorage
@@ -16,20 +16,20 @@ namespace Spectaris.Metrics
         public Guid StorageId { get; } = Guid.NewGuid();
 
         public MetricCounter TotalTimeMilliseconds { get; } = new MetricCounter();
-        public MetricCounter RequestTimeMilliseconds { get; } = new MetricCounter();
+        public MetricCounter HandlerTimeMilliseconds { get; } = new MetricCounter();
         public MetricCounter RequestSizeBytes { get; } = new MetricCounter();
 
-        public void AddRequest(TimeSpan totalTimeMs, TimeSpan requestTimeMs, long requestSizeBytes)
+        public void AddRequest(TimeSpan totalTimeMs, TimeSpan handlerTimeMs, long requestSizeBytes)
         {
-            TotalTimeMilliseconds.AddMeasurement((long) totalTimeMs.TotalMilliseconds);
-            RequestTimeMilliseconds.AddMeasurement((long) requestTimeMs.TotalMilliseconds);
+            TotalTimeMilliseconds.AddMeasurement((long)totalTimeMs.TotalMilliseconds);
+            HandlerTimeMilliseconds.AddMeasurement((long)handlerTimeMs.TotalMilliseconds);
             RequestSizeBytes.AddMeasurement(requestSizeBytes);
         }
 
         public override string ToString()
         {
             return
-                $"{nameof(StorageId)}: {StorageId}\r\n {nameof(TotalTimeMilliseconds)}: {TotalTimeMilliseconds}\r\n {nameof(RequestTimeMilliseconds)}: {RequestTimeMilliseconds}\r\n {nameof(RequestSizeBytes)}: {RequestSizeBytes}";
+                $"{nameof(StorageId)}: {StorageId}\r\n {nameof(TotalTimeMilliseconds)}: {TotalTimeMilliseconds}\r\n {nameof(HandlerTimeMilliseconds)}: {HandlerTimeMilliseconds}\r\n {nameof(RequestSizeBytes)}: {RequestSizeBytes}";
         }
     }
 }

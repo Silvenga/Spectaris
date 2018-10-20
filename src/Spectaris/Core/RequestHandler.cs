@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -14,7 +13,9 @@ namespace Spectaris.Core
 
         private readonly ITimeline _timeline;
         private readonly IStorage _storage;
-        private TimeSpan _startTick;
+        private TimeSpan _requestStartTick;
+        private TimeSpan _handlerStartTick;
+        private TimeSpan _handlerTime;
 
         public RequestHandler(ITimeline timeline, IStorage storage)
         {
@@ -22,11 +23,22 @@ namespace Spectaris.Core
             _storage = storage;
         }
 
-        public void Start(Guid workerId, IRequestContent context)
+        public void Start(Guid workerId, IRequestContext context)
         {
-            _startTick = _timeline.GetCurrentTick();
+            _requestStartTick = _timeline.GetCurrentTick();
 
             context.AddHeader("X-Spectaris-WorkerId", workerId.ToString());
+            context.AddHeader("X-Spectaris-StorageId", _storage.StorageId.ToString());
+        }
+
+        public void BeginHandler()
+        {
+            _handlerStartTick = _timeline.GetCurrentTick();
+        }
+
+        public void EndHandler()
+        {
+            _handlerTime = _timeline.GetTimeSinceTick(_handlerStartTick);
         }
 
         public void Writing(IResponseContext context)
@@ -60,15 +72,10 @@ namespace Spectaris.Core
             // The first event appears to be correct - as completion actually sends headers to the client.
             // The other two requests are either for ~/default.aspx or ~/ - which makes me wonder if this is caused by the rewrite module.
             // In any case, these requests are canceled (requested) when the first request completes - ignoring for now.
-            var requestTime = _timeline.GetTimeSinceTick(_startTick);
-            _storage.AddRequest(requestTime, requestTime, context.ResponseSizeBytes);
+            var requestTime = _timeline.GetTimeSinceTick(_requestStartTick);
+            _storage.AddRequest(requestTime, _handlerTime, context.ResponseSizeBytes);
 
-            context.AddHeader("X-Spectaris-Count", _storage.TotalTimeMilliseconds.Count.ToString());
-            context.AddHeader("X-Spectaris-TotalMs", _storage.TotalTimeMilliseconds.Total.ToString());
-            context.AddHeader("X-Spectaris-AverageMs", _storage.TotalTimeMilliseconds.Average.ToString(CultureInfo.InvariantCulture));
-            context.AddHeader("X-Spectaris-TotalBytes", _storage.RequestSizeBytes.Total.ToString());
-            context.AddHeader("X-Spectaris-AverageBytes", _storage.RequestSizeBytes.Average.ToString(CultureInfo.InvariantCulture));
-            context.AddHeader("X-Spectaris-StorageId", _storage.StorageId.ToString());
+            context.AddHeader("X-Spectaris-Request-Count", _storage.TotalTimeMilliseconds.Count.ToString());
         }
     }
 }
