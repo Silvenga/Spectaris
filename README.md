@@ -23,3 +23,9 @@ Invoke-WebRequest https://github.com/Silvenga/Spectaris/releases/download/1.0.0/
 ```
 
 Note that all the IIS worker processes must be restarted for the module to be loaded.
+
+## Requirements
+
+- Tested under IIS 10.
+- Requires at least 4.6.2 to be installed.
+- Only the integrated pipeline mode is supported.
