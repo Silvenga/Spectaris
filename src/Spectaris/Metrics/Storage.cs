@@ -29,8 +29,8 @@ namespace Spectaris.Metrics
 
         public void AddRequest(TimeSpan totalTimeMs, TimeSpan handlerTimeMs, long requestSizeBytes)
         {
-            TotalTimeMilliseconds.AddMeasurement((long)totalTimeMs.TotalMilliseconds);
-            HandlerTimeMilliseconds.AddMeasurement((long)handlerTimeMs.TotalMilliseconds);
+            TotalTimeMilliseconds.AddMeasurement((long) totalTimeMs.TotalMilliseconds);
+            HandlerTimeMilliseconds.AddMeasurement((long) handlerTimeMs.TotalMilliseconds);
             RequestSizeBytes.AddMeasurement(requestSizeBytes);
         }
 

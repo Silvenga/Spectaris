@@ -40,7 +40,7 @@ namespace Spectaris.Tests.Core
         }
 
         [Fact]
-        public void When_rewriting_and_body__is_missing_then_do_not_rewrite()
+        public void When_rewriting_and_body_is_missing_then_do_not_rewrite()
         {
             var displayMetricsFake = Autofixture.Create<string>();
             _storage.GetHumanReadable().Returns(displayMetricsFake);
